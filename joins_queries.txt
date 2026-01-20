@@ -1,0 +1,96 @@
+CREATE TABLE customers (
+    customer_id INT PRIMARY KEY,
+    customer_name VARCHAR(100),
+    region VARCHAR(50)
+);
+
+CREATE TABLE categories (
+    category_id INT PRIMARY KEY,
+    category_name VARCHAR(50)
+);
+
+CREATE TABLE products (
+    product_id INT PRIMARY KEY,
+    product_name VARCHAR(100),
+    category_id INT,
+    price DECIMAL(10,2),
+    FOREIGN KEY (category_id) REFERENCES categories(category_id)
+);
+
+CREATE TABLE orders (
+    order_id INT PRIMARY KEY,
+    order_date DATE,
+    customer_id INT,
+    product_id INT,
+    quantity INT,
+    FOREIGN KEY (customer_id) REFERENCES customers(customer_id),
+    FOREIGN KEY (product_id) REFERENCES products(product_id)
+);
+INSERT INTO customers VALUES
+(1, 'Amit Sharma', 'West'),
+(2, 'Neha Verma', 'East'),
+(3, 'Rahul Patil', 'South'),
+(4, 'Anjali Mehta', 'North'),
+(5, 'Suresh Rao', 'East');
+INSERT INTO categories VALUES
+(1, 'Technology'),
+(2, 'Furniture'),
+(3, 'Office Supplies');
+INSERT INTO products VALUES
+(101, 'Laptop', 1, 60000),
+(102, 'Mobile Phone', 1, 30000),
+(103, 'Office Chair', 2, 15000),
+(104, 'Table', 2, 22000),
+(105, 'Printer Paper', 3, 500);
+INSERT INTO orders VALUES
+(1001, '2024-01-05', 1, 101, 1),
+(1002, '2024-01-07', 2, 103, 2),
+(1003, '2024-01-10', 1, 102, 1),
+(1004, '2024-01-12', 3, 105, 10),
+(1005, '2024-01-15', 4, 104, 1);
+
+INNER JOIN – Orders + Customers
+SELECT o.order_id,
+       o.order_date,
+       c.customer_name,
+       c.region
+FROM orders o
+INNER JOIN customers c
+ON o.customer_id = c.customer_id;
+
+LEFT JOIN – Customers with NO Orders
+SELECT c.customer_id,
+       c.customer_name
+FROM customers c
+LEFT JOIN orders o
+ON c.customer_id = o.customer_id
+WHERE o.order_id IS NULL;
+
+
+Orders + Products → Revenue per Product
+
+SELECT p.product_name,
+       SUM(o.quantity * p.price) AS total_revenue
+FROM orders o
+INNER JOIN products p
+ON o.product_id = p.product_id
+GROUP BY p.product_name
+ORDER BY total_revenue DESC;
+
+Categories + Products → Category Revenue
+SELECT c.category_name,
+       SUM(o.quantity * p.price) AS category_revenue
+FROM orders o
+INNER JOIN products p ON o.product_id = p.product_id
+INNER JOIN categories c ON p.category_id = c.category_id
+GROUP BY c.category_name;
+
+Business Question (Region + Date Filter)
+SELECT c.region,
+       SUM(o.quantity * p.price) AS total_sales
+FROM orders o
+JOIN customers c ON o.customer_id = c.customer_id
+JOIN products p ON o.product_id = p.product_id
+WHERE c.region = 'West'
+AND o.order_date BETWEEN '2024-01-01' AND '2024-01-31'
+GROUP BY c.region;

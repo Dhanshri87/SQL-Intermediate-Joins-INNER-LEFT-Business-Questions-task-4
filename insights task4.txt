@@ -1,0 +1,16 @@
+Business Insights (SQL Joins Project)
+
+Insight 1: Technology Products Generate Maximum Revenue
+
+Technology products such as laptops and mobile phones contribute the highest share of total revenue. This shows strong customer demand and indicates that focusing on technology SKUs can significantly improve overall sales performance.
+
+---
+
+Insight 2: Presence of Inactive Customers
+
+Using a LEFT JOIN, customers who have never placed any orders were identified. These customers represent an opportunity for marketing teams to run re-engagement campaigns like discounts or personalized offers.
+
+Insight 3: Category-Level Revenue Helps Strategy Planning
+
+Category-wise revenue analysis reveals uneven sales distribution across categories. High-performing categories should receive more inventory and promotion focus, while low-performing categories need strategy improvement.
+
